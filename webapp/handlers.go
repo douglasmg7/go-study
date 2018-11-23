@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 	"strconv"
-	"strings"
+	// "strings"
 )
 
 // http://localhost:8080
@@ -13,17 +15,55 @@ func home(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	r.ParseForm()
-	fmt.Println("Form", r.Form)
-	fmt.Println("path", r.URL.Path)
-	fmt.Println("scheme", r.URL.Scheme)
-	fmt.Println(r.Form["url_long"])
-	for k, v := range r.Form {
-		fmt.Println("key:", k)
-		fmt.Println("value:", strings.Join(v, ""))
+
+	files := []string{
+		"./template/home.page.tmpl",
+		"./template/base.layout.tmpl",
+		"./template/footer.partial.tmpl",
 	}
-	fmt.Println()
-	fmt.Fprintf(w, "Hello World")
+	t, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Error", 500)
+		return
+	}
+
+	err = t.Execute(w, nil)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Error", 500)
+	}
+}
+
+// http://localhost:8080
+func home_old(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+	// r.ParseForm()
+	// fmt.Println("Form", r.Form)
+	// fmt.Println("path", r.URL.Path)
+	// fmt.Println("scheme", r.URL.Scheme)
+	// fmt.Println(r.Form["url_long"])
+	// for k, v := range r.Form {
+	// 	fmt.Println("key:", k)
+	// 	fmt.Println("value:", strings.Join(v, ""))
+	// }
+	// fmt.Println()
+	// fmt.Fprintf(w, "Hello World")
+	t, err := template.ParseFiles("./template/home.page.tmpl")
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Error", 500)
+		return
+	}
+
+	err = t.Execute(w, nil)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Error", 500)
+	}
 }
 
 // http://localhost:8080/snippet?id=3
