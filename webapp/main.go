@@ -1,31 +1,23 @@
 package main
 
 import (
-	_ "github.com/julienschmidt/httprouter"
+	"github.com/julienschmidt/httprouter"
 	"log"
 	"net/http"
 )
 
 func main() {
-	// redirection
-	rh := http.RedirectHandler("https://www.zunka.com.br", 307)
+	router := httprouter.New()
 
-	// mux_ := httprouter.New()
-	mux := http.NewServeMux()
-	mux.Handle("/zunka", rh)
-	mux.HandleFunc("/", home)
-	mux.HandleFunc("/snippet", showSnippet)
-	mux.HandleFunc("/snippet/create", createSnippet)
+	router.GET("/", home)
+	router.GET("/snippet/:id", showSnippet)
+	router.POST("/snippet/create", createSnippet)
 
-	fileServer := http.FileServer(http.Dir("./static/"))
-	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
+	router.ServeFiles("/static/*filepath", http.Dir("./static/"))
 
 	log.Println("Starting server on :8080")
-	err := http.ListenAndServe(":8080", mux)
+	err := http.ListenAndServe(":8080", router)
 	log.Fatal("ListenAndServe", err)
-	// if err != nil {
-	// 	log.Fatal("ListenAndServe", err)
-	// }
 }
 
 // go run *
