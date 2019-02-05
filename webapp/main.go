@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "database/sql"
+	"database/sql"
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/mattn/go-sqlite3"
@@ -19,6 +19,11 @@ func init() {
 }
 
 func main() {
+	// log.Fatal(nil)
+	db, err := sql.Open("sqlite3", "./sail_school.db")
+	check(err)
+	defer db.Close()
+
 	router := httprouter.New()
 	router.GET("/favicon.ico", faviconHandler)
 	router.GET("/", index)
@@ -35,7 +40,14 @@ func main() {
 	router.ServeFiles("/static/*filepath", http.Dir("./static/"))
 
 	log.Println("Starting server on", port)
+	// Why log.Fall work here?
 	log.Fatal(http.ListenAndServe(port, router))
+}
+
+func check(err error) {
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func errExample(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
