@@ -10,30 +10,43 @@ import (
 	"net/http"
 )
 
-var tpl *template.Template
+var tmplMaster *template.Template
+var tmplAll map[string]*template.Template
+var db *sql.DB
+var err error
 
 const port = ":8080"
 
 func init() {
-	tpl = template.Must(template.ParseGlob("templates/*"))
+	tmplMaster = template.Must(template.ParseGlob("templates/master/*"))
+
+	tmplAll = make(map[string]*template.Template)
+	tmplAll["user_add"] = template.Must(template.Must(tmplMaster.Clone()).ParseFiles("templates/user_add.tpl"))
+	tmplAll["entrance_add"] = template.Must(template.Must(tmplMaster.Clone()).ParseFiles("templates/entrance_add.tpl"))
+
+	// for _, tplItem := range tmplAll["user_add"].Templates() {
+	// 	log.Println(tplItem.Name())
+	// }
 }
 
 func main() {
 	// log.Fatal(nil)
-	db, err := sql.Open("sqlite3", "./sail_school.db")
+	db, err = sql.Open("sqlite3", "./sail_school.db")
 	check(err)
 	defer db.Close()
+
+	err = db.Ping()
+	check(err)
 
 	router := httprouter.New()
 	router.GET("/favicon.ico", faviconHandler)
 	router.GET("/", index)
-	router.GET("/about", about)
-	router.GET("/contact", contact)
-	router.GET("/apply", apply)
-	router.POST("/apply", applyProcess)
+
+	router.GET("/user_add", user_add)
+	router.GET("/entrance_add", entrance_add)
+
 	router.GET("/user/:name", user)
 	router.GET("/blog/:category/:article", blogRead)
-	router.POST("/blog/:category/:article", blogWrite)
 
 	router.GET("/err", errExample)
 
@@ -60,12 +73,17 @@ func faviconHandler(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 }
 
 func index(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	err := tpl.ExecuteTemplate(w, "index.gohtml", nil)
+	err := tmplAll["entrance_add"].ExecuteTemplate(w, "entrance_add.tpl", nil)
 	HandleError(w, err)
 }
 
-func about(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	err := tpl.ExecuteTemplate(w, "about.gohtml", nil)
+func user_add(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	err := tmplAll["user_add"].ExecuteTemplate(w, "user_add.tpl", nil)
+	HandleError(w, err)
+}
+
+func entrance_add(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	err := tmplAll["entrance_add"].ExecuteTemplate(w, "entrance_add.tpl", nil)
 	HandleError(w, err)
 }
 
@@ -76,26 +94,6 @@ func user(w http.ResponseWriter, req *http.Request, ps httprouter.Params) {
 func blogRead(w http.ResponseWriter, req *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "READ CATEGORY, %s!\n", ps.ByName("category"))
 	fmt.Fprintf(w, "READ ARTICLE, %s!\n", ps.ByName("article"))
-}
-
-func blogWrite(w http.ResponseWriter, req *http.Request, ps httprouter.Params) {
-	fmt.Fprintf(w, "WRITE CATEGORY, %s!\n", ps.ByName("category"))
-	fmt.Fprintf(w, "WRITE ARTICLE, %s!\n", ps.ByName("article"))
-}
-
-func contact(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	err := tpl.ExecuteTemplate(w, "contact.gohtml", nil)
-	HandleError(w, err)
-}
-
-func apply(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	err := tpl.ExecuteTemplate(w, "apply.gohtml", nil)
-	HandleError(w, err)
-}
-
-func applyProcess(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	err := tpl.ExecuteTemplate(w, "applyProcess.gohtml", nil)
-	HandleError(w, err)
 }
 
 func HandleError(w http.ResponseWriter, err error) {
