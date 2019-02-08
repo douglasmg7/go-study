@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+CompileDaemon -build="go build web_app.go" -command="./web_app dev"

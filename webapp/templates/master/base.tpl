@@ -10,6 +10,18 @@
         <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700'> -->
     </head>
     <body>
+        <section class="hero is-primary">
+          <div class="hero-body">
+            <div class="container">
+              <h1 class="title">
+                Escola de barco a vela
+              </h1>
+              <h2 class="subtitle">
+                Iate Clube Lagoa dos Ingleses
+              </h2>
+            </div>
+          </div>
+        </section>
         {{template "body" .}}
     </body>
 </html>

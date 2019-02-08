@@ -3,5 +3,9 @@
 {{define "title"}}Usuário{{end}}
 
 {{define "body"}}
-<h2>Usuário</h2>
+<div class="container"></div>
+  <h2 class="subtitle">Usuário</h2>
+  <table>
+    
+  </table>
 {{end}}
