@@ -14,7 +14,7 @@
     <body>
         {{template "nav" .}}
         {{template "body" .}}
-        {{template "footer" .}}
+        <!-- {{template "footer" .}} -->
     </body>
 </html>
 {{end}}
