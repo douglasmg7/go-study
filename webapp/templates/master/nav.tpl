@@ -1,7 +1,7 @@
 {{define "nav"}}
 <nav class="navbar is-info" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
+    <a class="navbar-item" href="/">
       <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
     </a>
 
@@ -15,8 +15,8 @@
   <div class="navbar-menu" id="navbarBasicExample">
     <!-- <div class="navbar-start"> -->
     <div class="navbar-end">
-      <a class="navbar-item">
-        Home
+      <a class="navbar-item" href="/student-new">
+        Novo aluno
       </a>
 
       <a class="navbar-item">
