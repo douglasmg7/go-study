@@ -3,11 +3,9 @@ package main
 import "fmt"
 
 func main() {
-	s1 := []int{1, 2}
-	s2 := []int{3, 4}
-	fmt.Printf("%v\n", s1)
-	fmt.Printf("%v\n", s2)
-	fmt.Printf("%v\n", append(s1, s2...))
-	fmt.Printf("%v\n", s1)
-	fmt.Printf("%v\n", s2)
+  // Slice of int.
+  s1 := []int{1, 2, 3, 4, 5, 6, 7, 8} // Composite literal.
+  fmt.Printf("Capacity: %v\n", cap(s1))
+  fmt.Printf("Length: %v\n", len(s1))
+  fmt.Printf("s1: %v\n", s1)
 }
