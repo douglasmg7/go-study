@@ -9,5 +9,3 @@ func main() {
 func completeName(firstName, lastName string) string {
 	return firstName + " " + lastName
 }
-
-// Make a func that return two params.
