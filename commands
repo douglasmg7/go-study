@@ -1,0 +1,12 @@
+# Create a module.
+mkdir <dir_name>
+cd <dir_name>
+go init mod module github.com/douglasmg7/snippetbox
+
+# Build.
+go build <filename>
+go build -o <executable> <filename>
+
+# Build and run.
+go run <filename>
+
