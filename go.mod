@@ -6,4 +6,5 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/gofiber/fiber v1.14.6
 	github.com/gofiber/fiber/v2 v2.0.2
+	golang.org/x/tour v0.1.0 // indirect
 )
