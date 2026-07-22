@@ -26,3 +26,6 @@ go.work.sum
 
 # Vscode
 .vscode
+
+# Just for tests
+play.go
